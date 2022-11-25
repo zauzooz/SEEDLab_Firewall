@@ -5,7 +5,9 @@ sudo docker-compose -f Labsetup/docker-compose.yml build
 
 # Task 1: Implement a Simple firewall
 
-## Loadable a kernel module
+## Task 1.A: Implement a Simple Kernel Module
+
+Step1: Loadable a kernel module
 
 ```c
 // hello.c
@@ -32,9 +34,9 @@ MODULE_LICENSE("GPL");
 
 ```
 
-## Compling a kernel module
+Step2: Compling a kernel module
 
-Repare a Makefile file, type ```make``` command to run.
+- Repare a Makefile file.
 
 ```Makefile
 obj-m += hello.o
@@ -45,9 +47,13 @@ clean:
 	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) clean
 ```
 
+- Type ```make``` command to run.
+
 ```shell
 make
 ```
+
+Step3: Folowing these command:
 
 ```shell
 $ sudo insmod hello.ko  (inserting a module)
@@ -56,7 +62,7 @@ $ sudo rmmod hello      (remove the module)
 $ dmesg                 (check the messages)
 ```
 
-### Task 1B
+## Task 1.B: Implement a Simple Firewall Using Netfilter
 
 seedFilter.c
 
@@ -161,11 +167,220 @@ module_exit(removeFilter);
 MODULE_LICENSE("GPL");
 ```
 
-### Task 1B: prevent ping
+### Task 1.B: prevent ping
 
 ```C
 
 ```
 
-### Task 1B: prevent telnet
+### Task 1.B: prevent telnet
 
+```C
+
+```
+
+# Task 2: Experimenting with Stateless Firewall Rules
+
+### Task 2.A: Protecting the Router
+
+To ping from host A to seed-router:
+
+[]()
+
+At the seed-router, set a rule:
+
+```shell
+iptables -A INPUT -p icmp --icmp-type echo-request -j ACCEPT
+iptables -A OUTPUT -p icmp --icmp-type echo-reply -j ACCEPT
+iptables -P OUPUT DROP
+iptables -P INPUT DROP
+
+```
+
+Now, try to ping from host A to seed-router:
+
+[]()
+
+### Task 2.B: Protecting the Internal Network
+
+In this task, we will set up firewall rules on the **router** to protect the internal network 192.168.60.0/24.
+
+We need to enforce the following restrictions on the ICMP traffic:
+1. Outside hosts cannot ping internal hosts.
+
+2. Outside hosts can ping the router.
+
+3. Internal hosts can ping outside hosts.
+
+4. All other packets between the internal and external networks should be blocked.
+
+Following my rules:
+
+```
+iptables -A FORWARD -p icmp --icmp-type echo-reply -d 192.168.60.0/24 -j ACCEPT
+iptables -A FORWARD -p icmp --icmp-type echo-request -s 192.168.60.0/24 -j ACCEPT
+iptables -A FORWARD -p icmp -d 192.168.60.0/24 -j DROP
+iptables -A FORWARD -j DROP
+```
+
+Before appling rules:
+
+- Host A pings to host 1, host 2 and host 3:
+
+[]()
+
+[]()
+
+[]()
+
+- Host A pings to router (2 interface):
+
+[]()
+
+[]()
+
+- Host A telnet to host 1, host 2 and host 3:
+
+[]()
+
+[]()
+
+[]()
+
+- Host 1, host 2 and host 3 ping to host A:
+
+[]()
+
+[]()
+
+[]()
+
+- Host 1, host 2 and host 3 telnet to host A:
+
+[]()
+
+[]()
+
+[]()
+
+After appling rules:
+
+- Host A pings to host 1, host 2 and host 3:
+
+[]()
+
+[]()
+
+[]()
+
+- Host A pings to router (2 interface):
+
+[]()
+
+[]()
+
+- Host A telnet to host 1, host 2 and host 3:
+
+[]()
+
+[]()
+
+[]()
+
+- Host 1, host 2 and host 3 ping to host A:
+
+[]()
+
+[]()
+
+[]()
+
+- Host 1, host 2 and host 3 telnet to host A:
+
+[]()
+
+[]()
+
+[]()
+
+Refresh iptables router:
+
+```shell
+iptables -F
+iptables -A FORWARD -j ACCEPT
+```
+
+### Task 2.C: Protecting Internal Servers
+
+In this task, we want to protect the TCP servers inside the internal network (192.168.60.0/24)
+
+We would like to achieve the following objectives:
+
+1. All the internal hosts run a telnet server (listening to port 23). Outside hosts can only access the telnetserver on 192.168.60.5, not the other internal hosts.
+
+2. Outside hosts cannot access other internal servers.
+
+3. Internal hosts can access all the internal servers.
+
+4. Internal hosts cannot access external servers.
+
+5. In this task, the connection tracking mechanism is not allowed. It will be used in a later task.
+
+Following my rules:
+
+```shell
+iptables -A FORWARD -p tcp --dport 23 -d 192.168.60.5 -j ACCEPT
+iptables -A FORWARD -p tcp --dport 23 ! -d  192.168.60.5 -j DROP
+```
+
+Before appling rules:
+
+- Host A telnets to host 1, host 2 and host 3:
+
+[]()
+
+[]()
+
+[]()
+
+- Host 1, host 2 and host 3 telnet to host A:
+
+[]()
+
+[]()
+
+[]()
+
+After appling rules:
+
+- Host A telnets to host 1, host 2 and host 3:
+
+[]()
+
+[]()
+
+[]()
+
+- Host 1, host 2 and host 3 telnet to host A:
+
+[]()
+
+[]()
+
+[]()
+
+Refresh iptables router:
+
+```shell
+iptables -F
+```
+
+# Task 3: Connection Tracking and Stateful Firewall
+
+## Task 3.A: Experiment with the Connection Tracking
+
+## Task 3.B: Setting Up a Stateful Firewall
+
+# Task 4: Limiting Network Traffic
+
+# Task 5: Load Balancing
