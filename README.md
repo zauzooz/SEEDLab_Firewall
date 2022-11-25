@@ -379,7 +379,21 @@ iptables -F
 
 ## Task 3.A: Experiment with the Connection Tracking
 
+- ICMP connection state is kept in 29s.
+
+[]()
+
+- UDP connection state is kept in 28s.
+
+[]()
+
+- TCP connection state is kept in 431998s.
+
+[]()
+
 ## Task 3.B: Setting Up a Stateful Firewall
+
+
 
 # Task 4: Limiting Network Traffic
 
