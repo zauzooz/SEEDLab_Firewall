@@ -1,0 +1,1 @@
+cmd_/home/nnt/SEEDLab/Firewall/Task_1B_prevent_telnet/blockTelnet.ko := ld -r  -m elf_x86_64 -z noexecstack   --build-id=sha1  -T scripts/module.lds -o /home/nnt/SEEDLab/Firewall/Task_1B_prevent_telnet/blockTelnet.ko /home/nnt/SEEDLab/Firewall/Task_1B_prevent_telnet/blockTelnet.o /home/nnt/SEEDLab/Firewall/Task_1B_prevent_telnet/blockTelnet.mod.o;  true

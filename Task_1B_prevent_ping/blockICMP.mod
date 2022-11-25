@@ -1,0 +1,2 @@
+/home/nnt/SEEDLab/Firewall/Task_1B_prevent_ping/blockICMP.o
+

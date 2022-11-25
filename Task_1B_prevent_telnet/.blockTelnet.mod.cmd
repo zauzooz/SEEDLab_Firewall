@@ -1,0 +1,1 @@
+cmd_/home/nnt/SEEDLab/Firewall/Task_1B_prevent_telnet/blockTelnet.mod := { echo  /home/nnt/SEEDLab/Firewall/Task_1B_prevent_telnet/blockTelnet.o;  echo; } > /home/nnt/SEEDLab/Firewall/Task_1B_prevent_telnet/blockTelnet.mod

@@ -1,0 +1,1 @@
+cmd_/home/nnt/SEEDLab/Firewall/Task_1B_prevent_ping/blockICMP.mod := { echo  /home/nnt/SEEDLab/Firewall/Task_1B_prevent_ping/blockICMP.o;  echo; } > /home/nnt/SEEDLab/Firewall/Task_1B_prevent_ping/blockICMP.mod

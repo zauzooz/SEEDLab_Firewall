@@ -1,0 +1,1 @@
+cmd_/home/nnt/SEEDLab/Firewall/Task_1B/seedFilter.ko := ld -r  -m elf_x86_64 -z noexecstack   --build-id=sha1  -T scripts/module.lds -o /home/nnt/SEEDLab/Firewall/Task_1B/seedFilter.ko /home/nnt/SEEDLab/Firewall/Task_1B/seedFilter.o /home/nnt/SEEDLab/Firewall/Task_1B/seedFilter.mod.o;  true

@@ -1,0 +1,1 @@
+cmd_/home/nnt/SEEDLab/Firewall/Task_1B_prevent_telnet/Module.symvers := sed 's/\.ko$$/\.o/' /home/nnt/SEEDLab/Firewall/Task_1B_prevent_telnet/modules.order | scripts/mod/modpost -m -a  -o /home/nnt/SEEDLab/Firewall/Task_1B_prevent_telnet/Module.symvers -e -i Module.symvers   -T -
