@@ -342,7 +342,8 @@ Following my rules:
 
 ```shell
 iptables -A FORWARD -p tcp --dport 23 -d 192.168.60.5 -j ACCEPT
-iptables -A FORWARD -p tcp --dport 23 ! -d  192.168.60.5 -j DROP
+iptables -A FORWARD -p tcp --sport 23 -s 192.168.60.5 -j ACCEPT
+iptables -P FORWARD DROP
 ```
 
 Before appling rules:
@@ -363,6 +364,24 @@ Before appling rules:
 
 []()
 
+- Host 1 telnets to host 2 and host 3:
+
+[]()
+
+[]()
+
+- Host 2 telnets to host 1 and host 3:
+
+[]()
+
+[]()
+
+- Host 3 telnets to host 1 and host 2:
+
+[]()
+
+[]()
+
 After appling rules:
 
 - Host A telnets to host 1, host 2 and host 3:
@@ -376,6 +395,24 @@ After appling rules:
 - Host 1, host 2 and host 3 telnet to host A:
 
 []()
+
+[]()
+
+[]()
+
+- Host 1 telnets to host 2 and host 3:
+
+[]()
+
+[]()
+
+- Host 2 telnets to host 1 and host 3:
+
+[]()
+
+[]()
+
+- Host 3 telnets to host 1 and host 2:
 
 []()
 
@@ -441,6 +478,24 @@ Before applying rules:
 
 []()
 
+- Host 1 telnets to host 2 and host 3.
+
+[]()
+
+[]()
+
+- Host 2 telnets to host 1 and host 3.
+
+[]()
+
+[]()
+
+- Host 3 telnets to host 1 and host 2.
+
+[]()
+
+[]()
+
 After applying rules:
 
 - Host A telnets to host 1, host 2 and host 3:
@@ -468,4 +523,56 @@ iptables -P FORWARD ACCEPT
 
 # Task 4: Limiting Network Traffic
 
+Use the module `limit` of iptables to limit the number of packets that can pass through the firewall.
+
+The first rule:
+
+```shell
+iptables -A FORWARD -s 10.9.0.5 -m limit --limit 10/minute --limit-burst 5 -j ACCEPT
+iptables -A FORWARD -s 10.9.0.5 -j DROP
+```
+
+[]()
+
+Refresh iptables of router
+
+```shell
+iptables -F
+```
+
+The second rule:
+
+```shell
+iptables -A FORWARD -s 10.9.0.5 -m limit --limit 10/minute --limit-burst 5 -j ACCEPT
+```
+
+[]()
+
 # Task 5: Load Balancing
+
+## Using nth mode
+
+On every host 1, host 2 and host 2 run command:
+
+```shell
+nc -lukp 8080
+```
+
+
+
+Following my rules:
+
+```shell
+iptables -t nat -A PREROUTING -p udp --dport 8080 -m statistic --mode nth --every 3 --packet 0 -j DNAT --to-destination 192.168.60.5:8080
+iptables -t nat -A PREROUTING -p udp --dport 8080 -m statistic --mode nth --every 3 --packet 1 -j DNAT --to-destination 192.168.60.6:8080
+iptables -t nat -A PREROUTING -p udp --dport 8080 -m statistic --mode nth --every 3 --packet 2 -j DNAT --to-destination 192.168.60.7:8080
+
+```
+
+On host A, run the command:
+
+```shell
+echo hello1; echo hello2; echo hello3 | nc -u 10.9.0.11 8080
+```
+
+## Using random mode:
