@@ -2,12 +2,12 @@
 
 Team 124C41:
 
-|Name              |                 ID|
-|-----------------:|------------------:|
-|Nguyen Ngoc Tai   |20521858           |
-|Tran Tri Duc      |20520454           |
-|Huynh The Hao     |20521291           |
-|Le Thanh Dat      |20521169           |
+|            Name |       ID |
+| --------------: | -------: |
+| Nguyen Ngoc Tai | 20521858 |
+|    Tran Tri Duc | 20520454 |
+|   Huynh The Hao | 20521291 |
+|    Le Thanh Dat | 20521169 |
 
 Build topology:
 
@@ -36,7 +36,7 @@ void cleanup(void)
 }
 
 // print "Hello World" when module is loaded
-module_init(initialization); 
+module_init(initialization);
 
 // print "Bye-byte World" when module is removed
 module_exit(cleanup);
@@ -59,7 +59,7 @@ clean:
 	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) clean
 ```
 
-- Type ```make``` command to run.
+- Type `make` command to run.
 
 ```shell
 make
@@ -87,7 +87,7 @@ seedFilter.c
 #include <linux/ip.h>
 #include <linux/udp.h>
 
-unsigned int printInfo(void *priv, struct sk_buff *skb, 
+unsigned int printInfo(void *priv, struct sk_buff *skb,
                         const struct nf_hook_state *state)
 {
     struct iphdr *iph;
@@ -114,7 +114,7 @@ unsigned int printInfo(void *priv, struct sk_buff *skb,
             printk("unknown");
             break;
     }
-    
+
     iph = ip_hdr(skb);
     printk("   %pI4 --> %pI4", &(iph->saddr), &(iph->daddr));
     return NF_ACCEPT;
@@ -307,16 +307,15 @@ MODULE_LICENSE("GPL");
 
 To ping from host A to seed-router:
 
-[]()
+![](/img/pic2.A.1.png "ping from host A to seed-router")
 
 At the seed-router, set a rule :
 
 ```shell
 iptables -A INPUT -p icmp --icmp-type echo-request -j ACCEPT
 iptables -A OUTPUT -p icmp --icmp-type echo-reply -j ACCEPT
-iptables -P OUPUT DROP
+iptables -P OUTPUT DROP
 iptables -P INPUT DROP
-
 ```
 
 Now, try to ping from host A to seed-router:
@@ -328,6 +327,7 @@ Now, try to ping from host A to seed-router:
 In this task, we will set up firewall rules on the **router** to protect the internal network 192.168.60.0/24.
 
 We need to enforce the following restrictions on the ICMP traffic:
+
 1. Outside hosts cannot ping internal hosts.
 
 2. Outside hosts can ping the router.
@@ -667,8 +667,6 @@ On every host 1, host 2 and host 2 run command:
 ```shell
 nc -lukp 8080
 ```
-
-
 
 Following my rules:
 
