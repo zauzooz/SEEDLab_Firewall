@@ -1,3 +1,15 @@
+# SEEDLab: Firewall
+
+Team 124C41:
+
+|Name              |                 ID|
+|-----------------:|------------------:|
+|Nguyen Ngoc Tai   |20521858           |
+|Tran Tri Duc      |20520454           |
+|Huynh The Hao     |20521291           |
+|Le Thanh Dat      |20521169           |
+
+Build topology:
 
 ```
 sudo docker-compose -f Labsetup/docker-compose.yml build
@@ -187,7 +199,7 @@ To ping from host A to seed-router:
 
 []()
 
-At the seed-router, set a rule:
+At the seed-router, set a rule :
 
 ```shell
 iptables -A INPUT -p icmp --icmp-type echo-request -j ACCEPT
@@ -303,7 +315,7 @@ After appling rules:
 
 []()
 
-Refresh iptables router:
+Refresh iptables of router:
 
 ```shell
 iptables -F
@@ -369,7 +381,7 @@ After appling rules:
 
 []()
 
-Refresh iptables router:
+Refresh iptables of router:
 
 ```shell
 iptables -F
@@ -393,7 +405,66 @@ iptables -F
 
 ## Task 3.B: Setting Up a Stateful Firewall
 
+We would like to achieve the following objectives
 
+1. All the internal hosts run a telnet server (listening to port 23). Outside hosts can only access the telnetserver on 192.168.60.5, not the other internal hosts.
+2. Outside hosts cannot access other internal servers.
+3. Internal hosts can access all the internal servers.
+4. Internal hosts can access external servers.
+5. In this task, the connection tracking mechanism is allowed.
+
+Following my rules:
+
+```shell
+iptables -A FORWARD -p tcp -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+iptables -A FORWARD -p tcp -i eth0 --dport 23 --syn -m conntrack --ctstate NEW -d 192.168.60.5 -j ACCEPT
+iptables -A FORWARD -p tcp -i eth1 --dport 23 --syn -m conntrack --ctstate NEW -j ACCEPT
+iptables -P FORWARD DROP
+
+```
+
+Before applying rules:
+
+- Host A telnets to host 1, host 2 and host 3:
+
+[]()
+
+[]()
+
+[]()
+
+- Host 1, host 2 and host 3 telnet to host A:
+
+[]()
+
+[]()
+
+[]()
+
+After applying rules:
+
+- Host A telnets to host 1, host 2 and host 3:
+
+[]()
+
+[]()
+
+[]()
+
+- Host 1, host 2 and host 3 telnet to host A:
+
+[]()
+
+[]()
+
+[]()
+
+Refresh iptables of router:
+
+```shell
+iptables -F
+iptables -P FORWARD ACCEPT
+```
 
 # Task 4: Limiting Network Traffic
 
