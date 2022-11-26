@@ -305,10 +305,6 @@ MODULE_LICENSE("GPL");
 
 ### Task 2.A: Protecting the Router
 
-To ping from host A to seed-router:
-
-![](/img/pic2.A.1.png "ping from host A to seed-router")
-
 At the seed-router, set a rule :
 
 ```shell
@@ -318,13 +314,9 @@ iptables -P OUTPUT DROP
 iptables -P INPUT DROP
 ```
 
-Now, try to ping from host A to seed-router:
-
-[]()
-
 ### Task 2.B: Protecting the Internal Network
 
-In this task, we will set up firewall rules on the **router** to protect the internal network 192.168.60.0/24.
+In this task, we will set up firewall rules on the router to protect the internal network 192.168.60.0/24.
 
 We need to enforce the following restrictions on the ICMP traffic:
 
@@ -341,89 +333,8 @@ Following my rules:
 ```
 iptables -A FORWARD -p icmp --icmp-type echo-reply -d 192.168.60.0/24 -j ACCEPT
 iptables -A FORWARD -p icmp --icmp-type echo-request -s 192.168.60.0/24 -j ACCEPT
-iptables -A FORWARD -p icmp -d 192.168.60.0/24 -j DROP
 iptables -A FORWARD -j DROP
 ```
-
-Before appling rules:
-
-- Host A pings to host 1, host 2 and host 3:
-
-[]()
-
-[]()
-
-[]()
-
-- Host A pings to router (2 interface):
-
-[]()
-
-[]()
-
-- Host A telnet to host 1, host 2 and host 3:
-
-[]()
-
-[]()
-
-[]()
-
-- Host 1, host 2 and host 3 ping to host A:
-
-[]()
-
-[]()
-
-[]()
-
-- Host 1, host 2 and host 3 telnet to host A:
-
-[]()
-
-[]()
-
-[]()
-
-After appling rules:
-
-- Host A pings to host 1, host 2 and host 3:
-
-[]()
-
-[]()
-
-[]()
-
-- Host A pings to router (2 interface):
-
-[]()
-
-[]()
-
-- Host A telnet to host 1, host 2 and host 3:
-
-[]()
-
-[]()
-
-[]()
-
-- Host 1, host 2 and host 3 ping to host A:
-
-[]()
-
-[]()
-
-[]()
-
-- Host 1, host 2 and host 3 telnet to host A:
-
-[]()
-
-[]()
-
-[]()
 
 Refresh iptables of router:
 
@@ -455,78 +366,6 @@ iptables -A FORWARD -p tcp --dport 23 -d 192.168.60.5 -j ACCEPT
 iptables -A FORWARD -p tcp --sport 23 -s 192.168.60.5 -j ACCEPT
 iptables -P FORWARD DROP
 ```
-
-Before appling rules:
-
-- Host A telnets to host 1, host 2 and host 3:
-
-[]()
-
-[]()
-
-[]()
-
-- Host 1, host 2 and host 3 telnet to host A:
-
-[]()
-
-[]()
-
-[]()
-
-- Host 1 telnets to host 2 and host 3:
-
-[]()
-
-[]()
-
-- Host 2 telnets to host 1 and host 3:
-
-[]()
-
-[]()
-
-- Host 3 telnets to host 1 and host 2:
-
-[]()
-
-[]()
-
-After appling rules:
-
-- Host A telnets to host 1, host 2 and host 3:
-
-[]()
-
-[]()
-
-[]()
-
-- Host 1, host 2 and host 3 telnet to host A:
-
-[]()
-
-[]()
-
-[]()
-
-- Host 1 telnets to host 2 and host 3:
-
-[]()
-
-[]()
-
-- Host 2 telnets to host 1 and host 3:
-
-[]()
-
-[]()
-
-- Host 3 telnets to host 1 and host 2:
-
-[]()
-
-[]()
 
 Refresh iptables of router:
 
@@ -569,60 +408,6 @@ iptables -A FORWARD -p tcp -i eth1 --dport 23 --syn -m conntrack --ctstate NEW -
 iptables -P FORWARD DROP
 
 ```
-
-Before applying rules:
-
-- Host A telnets to host 1, host 2 and host 3:
-
-[]()
-
-[]()
-
-[]()
-
-- Host 1, host 2 and host 3 telnet to host A:
-
-[]()
-
-[]()
-
-[]()
-
-- Host 1 telnets to host 2 and host 3.
-
-[]()
-
-[]()
-
-- Host 2 telnets to host 1 and host 3.
-
-[]()
-
-[]()
-
-- Host 3 telnets to host 1 and host 2.
-
-[]()
-
-[]()
-
-After applying rules:
-
-- Host A telnets to host 1, host 2 and host 3:
-
-[]()
-
-[]()
-
-[]()
-
-- Host 1, host 2 and host 3 telnet to host A:
-
-[]()
-
-[]()
-
-[]()
 
 Refresh iptables of router:
 
